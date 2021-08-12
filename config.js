@@ -1,4 +1,4 @@
 module.exports = {
-  delay: 7000,
+  delay: 3500,
   catId: 2,
 };
