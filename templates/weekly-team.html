@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Weekly Team Report</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.0/chart.min.js" integrity="sha512-asxKqQghC1oBShyhiBwA+YgotaSYKxGP1rcSYTDrB0U6DxwlJjU59B67U8+5/++uFjcuVM8Hh5cokLjZlhm3Vg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<style type="text/css">
+		html, body{
+			font-weight: normal;
+			font-family: 'Roboto', sans-serif;
+			font-size: 1rem;
+			background-color: #343434;
+			min-height: 100%;
+			width: 1200px;
+		}
+		h2 {
+			font-size: 2.5rem;
+		}
+		h3 {
+			font-size: 2rem;
+			margin-top: 50px;
+		}
+		header {
+			background-color: #343434;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			height: 50%;
+			padding: 30px;
+			color: #ffffff;
+		}
+		section {
+			padding-left: 30px;
+			padding-right: 30px;
+			padding-top: 100px;
+			padding-bottom: 100px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			background-color: rgb(246, 249, 252);
+		}
+		section canvas {
+			margin-left: 120px;
+			margin-right: 120px;
+		}
+		.kpicontainer {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+		.kpi {
+			background-color: #F94144;
+			color: #ffffff;
+			border-radius: 20px;
+			width: 200px;
+			height: 120px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			margin: 20px;
+		}
+		.kpi:nth-child(2) {
+			background-color: #F3722C;
+		}
+		.kpi:nth-child(3) {
+			background-color: #F8961E;
+		}
+		.kpi:nth-child(4) {
+			background-color: #F9C74F;
+		}
+		.kpi:nth-child(5) {
+			background-color: #90BE6D;
+		}
+		.kpi:nth-child(6) {
+			background-color: #43AA8B;
+		}
+		.kpiname {
+
+		}
+		.kpinumber {
+			font-size: 65px;
+		}
+		section:nth-child(2n) {
+			background-color: rgb(209, 214, 219);
+		}
+		.awardcontainer {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+		}
+		.award {
+			background-color: #ddb70c;
+			color: #ffffff;
+			border-radius: 20px;
+			width: 200px;
+			height: 120px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			margin: 20px;
+		}
+		.award:nth-child(2) {
+			background-color: #969696;
+		}
+		.award:nth-child(3) {
+			background-color: #ac5d03;
+		}
+		.awarddriver {
+
+		}
+		.awardvalue {
+			font-size: 50px;
+		}
+		footer {
+				background-color: #631111;
+				min-height: 100px;
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				justify-content: center;
+				color: #ffffff;
+		}
+		.canvascontainer {
+			height: 500px;
+			width: 100%;
+		}
+	</style>
+	<meta charset="utf-8">
+</head>
+<body>
+	<header>
+		<img src="https://kuhldata.com/images/kuhldata.png" width="100px" class="logo">
+		{{#if week}}
+		<h1>{{teamName}}'s Weekly Team Report</h1>
+		<p>{{year}}S{{season}} W{{week}}</p>
+		{{else}}
+		<h1>{{teamName}}'s Season Team Report</h1>
+		<p>{{year}}S{{season}}</p>
+		{{/if}}
+	</header>
+	<section>
+		<h2>Team KPIs</h2>
+		<div class="kpicontainer">
+			{{#each teamReport.kpis}}
+			<div class="kpi">
+				<div class="kpiname">{{this.title}}</div>
+				<div class="kpinumber">{{this.value}}</div>
+			</div>
+			{{/each}}
+			<!--<div class="kpi" style="background-color: #f4a261;">
+				<div class="kpiname">Races driven</div>
+				<div class="kpinumber">89</div>
+			</div>
+			<div class="kpi" style="background-color: #e76f51;">
+				<div class="kpiname">Races driven</div>
+				<div class="kpinumber">89</div>
+			</div>-->
+		</div>
+	</section>
+	<section>
+		<h2>Team Progress</h2>
+		<h3>iRating Change</h3>
+		<canvas id="iratingchart" width="800" height="450"></canvas>
+		<h3>Driver gains</h3>
+		<div class="canvascontainer" style="height: {{teamReport.gainReport.height}}px;">
+			<canvas id="gainchart"></canvas>
+		</div>
+		<h3>Driver iRatings</h3>
+		<div class="canvascontainer" style="height: {{teamReport.driverIrReport.height}}px;">
+			<canvas id="driverirs"></canvas>
+		</div>
+		<h3>Series raced</h3>
+		<canvas id="racedseries" width="800" height="550"></canvas>
+		<h3>Race results</h3>
+		<canvas id="raceresults" width="800" height="550"></canvas>
+	</section>
+	<section>
+		<h2>Driver Awards</h2>
+		{{#each teamReport.driverAwards}}
+		{{#if this.drivers}}
+		<h3>{{this.title}}</h3>
+		<div class="awardcontainer">
+			{{#each this.drivers}}
+			<div class="award">
+				<div class="awarddriver">{{this.name}}</div>
+				<div class="awardvalue">{{this.value}}</div>
+			</div>
+			{{/each}}
+		</div>
+		{{/if}}
+		{{/each}}
+	</section>
+	<footer>
+		powered by kuhldata.com
+	</footer>
+	<script>
+		new Chart(document.getElementById("raceresults"), {
+				type: 'pie',
+				data: {
+					labels: {{{teamReport.racesOutcomeReport.labels}}},
+					datasets: [{
+						label: "race results",
+						backgroundColor: ["#F94144", "#F3722C","#F8961E","#F9C74F","#90BE6D", "#43AA8B", "#577590", '#f38590', '#eea180', '#f1b87a', '#f1b87a', '#b7d2a6', '#80cbb9', '#8fa4bc'],
+						data: {{{teamReport.racesOutcomeReport.counts}}},
+					}]
+				},
+				options: {
+					responsive: false,
+					plugins: {
+						legend: {
+							labels: {
+								font: {
+									size: 18,
+								},
+							},
+							position: 'bottom',
+						},
+					},
+					animation: {
+						duration: 0
+					},
+					title: {
+						display: true,
+						text: 'Predicted world population (millions) in 2050'
+					}
+				}
+		});
+	</script>
+	<script>
+		new Chart(document.getElementById("racedseries"), {
+				type: 'pie',
+				data: {
+					labels: {{{teamReport.racesSeriesReport.labels}}},
+					datasets: [{
+						label: "series done",
+						backgroundColor: ["#F94144", "#F3722C","#F8961E","#F9C74F","#90BE6D", "#43AA8B", "#577590", '#f38590', '#eea180', '#f1b87a', '#f1b87a', '#b7d2a6', '#80cbb9', '#8fa4bc'],
+						data: {{{teamReport.racesSeriesReport.counts}}},
+					}]
+				},
+				options: {
+					responsive: false,
+					plugins: {
+						legend: {
+							labels: {
+								font: {
+									size: 18,
+								},
+							},
+							position: 'bottom',
+						},
+					},
+					animation: {
+						duration: 0
+					},
+					title: {
+						display: true,
+						text: 'Predicted world population (millions) in 2050'
+					}
+				}
+		});
+	</script>
+	<script>
+		new Chart(document.getElementById("driverirs"), {
+				type: 'bar',
+				data: {
+					labels: {{{teamReport.driverIrReport.labels}}},
+					datasets: [
+						{
+							label: "iRating",
+							backgroundColor: "#43AA8B",
+							data: {{{teamReport.driverIrReport.ratings}}},
+						}
+					],
+				},
+				options: {
+					maintainAspectRatio: false,
+					plugins: {
+						legend: {
+							labels: {
+								font: {
+									size: 18,
+								},
+							},
+							position: 'bottom',
+						},
+					},
+					scales: {
+						y: {
+								ticks: {
+									autoSkip: false,
+									font: {
+											size: 17,
+									}
+								}
+						}
+					},
+					indexAxis: 'y',
+					animation: {
+						duration: 0
+					},
+					legend: { display: false },
+				}
+		});
+	</script>
+	<script>
+		new Chart(document.getElementById("gainchart"), {
+				type: 'bar',
+				data: {
+					labels: {{{teamReport.gainReport.labels}}},
+					datasets: [
+						{
+							label: "iRating gains",
+							backgroundColor: "#43AA8B",
+							data: {{{teamReport.gainReport.gains}}},
+						}
+					],
+				},
+				options: {
+					maintainAspectRatio: false,
+					plugins: {
+						legend: {
+							labels: {
+								font: {
+									size: 18,
+								},
+							},
+							position: 'bottom',
+						},
+					},
+					scales: {
+						y: {
+								ticks: {
+										autoSkip: false,
+										font: {
+												size: 17,
+										}
+								}
+						}
+					},
+					indexAxis: 'y',
+					animation: {
+						duration: 0
+					},
+					legend: { display: false },
+				}
+		});
+	</script>
+	<script>
+		new Chart(document.getElementById("iratingchart"), {
+			type: 'line',
+			data: {
+				labels: {{{teamReport.irReport.labels}}},
+				datasets: [
+					{ 
+						data: {{{teamReport.irReport.ratings}}},
+						label: "Daily",
+						borderColor: "#F94144",
+						fill: false
+					},
+					{ 
+						data: {{{teamReport.irReport.lfratings}}},
+						label: "Weekly",
+						borderColor: "#F8961E",
+						borderDash: [5, 5],
+						fill: false,
+						spanGaps: true,
+					},
+					{ 
+						data: {{{teamReport.irReport.races}}},
+						label: "Races driven",
+						type: 'bar',
+						backgroundColor: '#F9C74F',
+						borderDash: [5, 5],
+						fill: false,
+						yAxisID: 'y1',
+					},
+				],
+			},
+			options: {
+				elements: {
+						point:{
+								radius: 0
+						}
+				},
+				animation: {
+					duration: 0
+				},
+				responsive: true,
+				interaction: {
+					mode: 'index',
+					intersect: false,
+				},
+				stacked: false,
+				plugins: {
+					/*title: {
+						display: true,
+						text: ''
+					}*/
+					legend: {
+						labels: {
+							font: {
+								size: 18,
+							},
+						},
+						position: 'bottom',
+					},
+				},
+				scales: {
+					x: {
+						/*grid: {
+							color: '#444444',
+						}*/
+					},
+					y: {
+						type: 'linear',
+						display: true,
+						position: 'left',
+						/*grid: {
+							color: '#444444',
+						}*/
+					},
+					y1: {
+						type: 'linear',
+						display: true,
+						position: 'right',
+
+						// grid line settings
+						grid: {
+							drawOnChartArea: false, // only want the grid lines for one axis to show up
+							//color: '#ffffff',
+						},
+					},
+				}
+			},
+		});
+	</script>
+</body>
+</html>

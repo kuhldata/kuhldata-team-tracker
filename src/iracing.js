@@ -29,7 +29,7 @@ module.exports.getProfil = async (cookieString, irid) => fetch(`https://members.
     throw new Error('can not get profile');
   });
 
-module.exports.getRaces = async (cookieString, irid, year, season, week) => fetch(`https://members.iracing.com/memberstats/member/GetResults?custid=${irid}&showraces=1&showquals=0&showtts=0&showops=0&showofficial=1&showunofficial=0&showrookie=1&showclassd=1&showclassc=1&showclassb=1&showclassa=1&showpro=1&showprowc=1&lowerbound=0&upperbound=250&sort=start_time&order=desc&format=json&category=${config.catId}&seasonyear=${year}&seasonquarter=${season}&raceweek=${week}`, {
+module.exports.getRaces = async (cookieString, irid, catId, year, season, week = '') => fetch(`https://members.iracing.com/memberstats/member/GetResults?custid=${irid}&showraces=1&showquals=0&showtts=0&showops=0&showofficial=1&showunofficial=0&showrookie=1&showclassd=1&showclassc=1&showclassb=1&showclassa=1&showpro=1&showprowc=1&lowerbound=0&upperbound=250&sort=start_time&order=desc&format=json&category=${catId}&seasonyear=${year}&seasonquarter=${season}&raceweek=${week}`, {
   method: 'GET',
   headers: {
     'Cookie': cookieString,
