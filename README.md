@@ -14,7 +14,7 @@ The script should also run on Linux and Mac but I never tested it. So I only des
 ### Windows
 
 **Precondition**
-For the script to run, you need to install node on your pc. You can get it from here: https://nodejs.org/en/download/current/ 
+For the script to run, you need to install node on your pc. You can get it from here: [Node Homepage](https://nodejs.org/en/download/current/)
 
 To see if node is correctly installed type `node -v` and `npm -v` in a powershell.
 
@@ -22,15 +22,36 @@ To see if node is correctly installed type `node -v` and `npm -v` in a powershel
 `npm i kuhldata-team-tracker -g`
 
 ## Usage
-To let the script collect data (and save it as a csv) you can use the `teamtracker` command after installation.
+To let the script collect data (and generate a cool report png) you can use the `kuhldata-report` command after installation.
 
 The full command look like this:
-`teamtracker --year 2021 --season 3 --week 8 --user mail --pass '"password"' --drivers 518012 --drivers 228712`
+```cmd
+kuhldata-report --team team.txt --teamName "Demo Team" --year 2021 --season 3 --week 8 --road --user kalle+smurf@kalle.co --pass '"neg7gte_BNY_nxp5vkb"'
+```
 
-`year`, `season` and `week` specify the week you want the data for.
+`--team team.txt` specifies the text file with a list of iRacing driver IDs. One id per line, no comma or comments allowed. Example:
 
-You have to replace "mail" behind the `--user` option and "password" behind the `--pass` option with your credetials. Yes, this script is using your credentials. Every request happens via your account. The script is throttled to arround 1 request / 7 seconds. Still do not overstress the API. iRacing could get angry at a certain threshold. For the password you have to leave the format. If your password is "abc" it would say `--pass '"abc"'` in the command.
+```txt
+518012
+123456
+987654
+```
 
-Last but not least you have to add the drivers with ther iRacing customer id. Just add a `--drivers 123456` for each driver for now. I will adjust this later.
+`--teamName "Demo Team"` specifies the team name printed to the top of the report.
 
-PRO TIP: Put your command together in a text file and save it as soon as it is done, so you do not need to recreate it every week. Don't save your password with it, but the rest of the command. :D
+`--year 2021`, `--season 3` and `--week 8` specifies the time you want the report for. If you omit the `--year` the current year is used. If you omit the `--week` the report is build for the whole season.
+
+To select the category (road / oval / dirtRoad / dirtOval ) you want the report for specify the according option: `--road`, `--oval`, `--dirtRoad` or `--dirtOval`. If you omit the category, road is used.
+
+`--user`  and  `--pass` are used to hand over your credentials **directly** to iRacing. I do not send them anywhere else. It is needed to gather the data from iRacing's API. To be totally clear: That means you are using your own account for the requests. If iRacing at anytime decides that they do not want that reports like this are created they may punish your account. So: Be calm, the script is throttled to be fairly slow to not make iRacing angry. If I hear something, I will note it down here.
+
+## Notes
+* If a driver did not race in the timeframe of a report, his current iRating is assumed. Keep that in mind as it could make you calculations for reports in the past inaccurate. In case a driver did not race a line like `Driver 123456 did not race in this timeframe. Assuming his current iRating.`.
+
+## TODO
+* make command more reliable
+* optimize report output
+* report for single drivers
+
+## Support
+If you want to support me, I am happy to welcome you to the [kuhldata Discord](https://discord.gg/PTuZfQRWDj) or to link you to my [Ko-Fi Page](https://ko-fi.com/kuhldata).
