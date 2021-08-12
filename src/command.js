@@ -71,8 +71,8 @@ if(!argv.team) {
       }
     }
 
-    if(argv.week) console.log(`Creating Week Report for ${argv.year} S${argv.season} Week ${argv.week} for ${drivers.length} drivers.`);
-    else console.log(`Creating Season Report for ${argv.year} S${argv.season} for ${drivers.length} drivers.`);
+    if(argv.week) console.log(`Creating Week Report for ${year} S${argv.season} Week ${argv.week} for ${drivers.length} drivers.`);
+    else console.log(`Creating Season Report for ${year} S${argv.season} for ${drivers.length} drivers.`);
     
     report.createReport({
       drivers,
