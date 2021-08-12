@@ -221,14 +221,20 @@ module.exports.createReport = async ({drivers, user, pass, catId, year, season, 
     }
     for (let j = 0; j < profiles[i].races.length; j++) {
       // get earliest race
-      if(!firstRace || firstRace.startTime > profiles[i].races[j].startTime) {
+      if(!firstRace || firstRace.week > profiles[i].races[j].week) {
         firstRace = profiles[i].races[j];
       }
+      /*if(!firstRace || firstRace.startTime > profiles[i].races[j].startTime) {
+        firstRace = profiles[i].races[j];
+      }*/
 
       // get last race
-      if(!lastRace || lastRace.startTime < profiles[i].races[j].startTime) {
+      if(!lastRace || lastRace.week < profiles[i].races[j].week) {
         lastRace = profiles[i].races[j];
       }
+      /*if(!lastRace || lastRace.startTime < profiles[i].races[j].startTime) {
+        lastRace = profiles[i].races[j];
+      }*/
 
       // get result
       let result = getDriverResult(sessions, profiles[i].races[j].subSessionId, profiles[i].custID);
@@ -530,11 +536,8 @@ module.exports.createReport = async ({drivers, user, pass, catId, year, season, 
     driverAwards,
   };
 
-  console.log(JSON.stringify(outputData.teamReport.irReport));
-
 
   console.log('Done.')
-  console.log(outputData);
 
   await output.createReportPage(outputData);
 

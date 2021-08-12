@@ -47,6 +47,7 @@ To select the category (road / oval / dirtRoad / dirtOval ) you want the report 
 
 ## Notes
 * If a driver did not race in the timeframe of a report, his current iRating is assumed. Keep that in mind as it could make you calculations for reports in the past inaccurate. In case a driver did not race a line like `Driver 123456 did not race in this timeframe. Assuming his current iRating.`.
+* iRacing does odd things sometimes. For example: The season of some series is longer then the normal iRacing season. This can lead to some inaccuracy. I am thinking about a solution, but as the tool still works good, the current version ignores this problem.
 
 ## TODO
 * make command more reliable
