@@ -26,7 +26,7 @@ To let the script collect data (and generate a cool report png) you can use the 
 
 The full command look like this:
 ```cmd
-kuhldata-report --team team.txt --teamName "Demo Team" --year 2021 --season 3 --week 8 --road --user kalle+smurf@kalle.co --pass '"neg7gte_BNY_nxp5vkb"'
+kuhldata-report --team team.txt --teamName "Demo Team" --year 2021 --season 3 --week 8 --road --user mail@example.com --pass '"yourpassword"'
 ```
 
 `--team team.txt` specifies the text file with a list of iRacing driver IDs. One id per line, no comma or comments allowed. Example:
