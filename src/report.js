@@ -133,7 +133,7 @@ module.exports.createReport = async ({drivers, user, pass, catId, year, season, 
   console.log('Getting cookie... ');
   let cookieString = await cookies.scrapeCookie(user, pass);
   console.log('Cookie done. Yum.');
-  console.log(cookieString);
+  // console.log(cookieString);
 
   // get Profiles
   console.log('Getting profiles... ');
@@ -153,6 +153,7 @@ module.exports.createReport = async ({drivers, user, pass, catId, year, season, 
       profiles[i].races = [];
       console.log(`Driver ${profiles[i].custID} did not race in this timeframe. Assuming his current iRating.`)
     }
+    console.log(`Driver ${profiles[i].custID} did ${profiles[i].races.length} races.`)
     console.log(`Found races of ${i + 1}/${profiles.length} drivers`);
     await delay(config.delay);
   }
@@ -162,13 +163,14 @@ module.exports.createReport = async ({drivers, user, pass, catId, year, season, 
   await delay(config.delay);
   // Get Sessions
   const sessions = {};
+  let sessionLoadCount = 0;
   console.log('Getting Subsession Data...');
   for (let i = 0; i < profiles.length; i++) {
     for (let j = 0; j < profiles[i].races.length; j++) {
       if (!sessions[profiles[i].races[j].subSessionId]) {
         try {
           sessions[profiles[i].races[j].subSessionId] = await results.getOfficalResults(cookieString, profiles[i].races[j].subSessionId);
-
+          sessionLoadCount++;
         } catch (e) {
           console.log(e);
         }
@@ -179,7 +181,9 @@ module.exports.createReport = async ({drivers, user, pass, catId, year, season, 
     console.log(`Results from driver ${i + 1}/${profiles.length} done.`)
   }
 
-  console.log('Done.');
+
+
+  console.log(`${sessionLoadCount} sessions loaded.`);
 
   //console.log(JSON.stringify(sessions[profiles[0].races[0].subSessionId]));
 
