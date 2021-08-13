@@ -138,6 +138,7 @@ const getDriverResult = (
 module.exports.createReport = async ({
   drivers, user, pass, catId, startTime, endTime, teamName,
 }) => {
+  console.log(`Start Time: ${startTime} End Time: ${endTime}`);
   // get Cookie
   console.log('Getting cookie... ');
   const cookieString = await cookies.scrapeCookie(user, pass);

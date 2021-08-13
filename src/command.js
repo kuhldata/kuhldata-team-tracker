@@ -104,8 +104,8 @@ if (!argv.team) {
         user: argv.user,
         pass: argv.pass,
         catId,
-        startTime: weekTimes.start,
-        endTime: weekTimes.end,
+        startTime: weekTimes.start.getTime(),
+        endTime: weekTimes.end.getTime(),
         teamName: argv.teamName,
       });
     } else {
@@ -115,8 +115,8 @@ if (!argv.team) {
         user: argv.user,
         pass: argv.pass,
         catId,
-        startTime: seasonTimes.start,
-        endTime: seasonTimes.end,
+        startTime: seasonTimes.start.getTime(),
+        endTime: seasonTimes.end.getTime(),
         teamName: argv.teamName,
       });
     }
