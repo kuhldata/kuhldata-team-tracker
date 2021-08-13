@@ -22,7 +22,7 @@ To see if node is correctly installed type `node -v` and `npm -v` in a powershel
 `npm i kuhldata-team-tracker -g`
 
 ## Usage
-To let the script collect data (and generate a cool report png) you can use the `kuhldata-report` command after installation.
+To let the script collect data (and generate a cool report png) you can use the `kuhldata-report` command after installation. The PNG will be save in the folder you run the command in.
 
 The full command look like this:
 ```cmd
