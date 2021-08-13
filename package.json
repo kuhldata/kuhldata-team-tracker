@@ -2,13 +2,13 @@
   "name": "kuhldata-team-tracker",
   "version": "2.0.0",
   "description": "command line tool to track your team iRacing progress.",
-  "main": "src/index.js",
+  "main": "src/command.js",
   "bin": {
     "kuhldata-report": "./src/command.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./src/index.js"
+    "start": "node ./src/command.js"
   },
   "author": "Karl-Heinz Wallwitz",
   "license": "MIT",
