@@ -22,7 +22,7 @@ const createTopFarmerAward = (ps) => {
   };
   for(let i = 0; i < 3 && i < ps.length; i++) {
     report.drivers.push({
-      name: ps[i].displayName.replaceAll('+', ' '),
+      name: ps[i].displayName.replace(/\+/g, ' '),
       value: ps[i].kpis.gain,
     })
   };
@@ -39,7 +39,7 @@ const createTopWinnerAward = (ps) => {
   for(let i = 0; i < 3 && i < ps.length; i++) {
     if(ps[i].kpis.wins <= 0) break;
     report.drivers.push({
-      name: ps[i].displayName.replaceAll('+', ' '),
+      name: ps[i].displayName.replace(/\+/g, ' '),
       value: ps[i].kpis.wins,
     })
   };
@@ -56,7 +56,7 @@ const createInCollectorAward = (ps) => {
   for(let i = 0; i < 3 && i < ps.length; i++) {
     if(ps[i].kpis.incs <= 0) break;
     report.drivers.push({
-      name: ps[i].displayName.replaceAll('+', ' '),
+      name: ps[i].displayName.replace(/\+/g, ' '),
       value: ps[i].kpis.incs,
     })
   };
@@ -73,7 +73,7 @@ const createRacerAward = (ps) => {
   for(let i = 0; i < 3 && i < ps.length; i++) {
     if(ps[i].kpis.races <= 0) break;
     report.drivers.push({
-      name: ps[i].displayName.replaceAll('+', ' '),
+      name: ps[i].displayName.replace(/\+/g, ' '),
       value: ps[i].kpis.races,
     })
   };
@@ -420,7 +420,7 @@ module.exports.createReport = async ({drivers, user, pass, catId, year, season, 
       gainReport.labels.push('TEAM AVERAGE');
       gainReport.gains.push(teamKPIs.gain / profiles.length);
     }
-    gainReport.labels.push(profiles[i].displayName.replaceAll('+', ' '));
+    gainReport.labels.push(profiles[i].displayName.replace(/\+/g, ' '));
     gainReport.gains.push(profiles[i].kpis.gain);
   }
 
@@ -438,7 +438,7 @@ module.exports.createReport = async ({drivers, user, pass, catId, year, season, 
       driverIrReport.labels.push('TEAM AVERAGE');
       driverIrReport.ratings.push(teamKPIs.irsum / profiles.length);
     }
-    driverIrReport.labels.push(profiles[i].displayName.replaceAll('+', ' '));
+    driverIrReport.labels.push(profiles[i].displayName.replace(/\+/g, ' '));
     driverIrReport.ratings.push(profiles[i].endIr);
   }
 

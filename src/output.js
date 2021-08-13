@@ -164,7 +164,7 @@ const createReportPage = async (reportData) => {
 	let filename = `${reportData.teamName}-${reportData.year}-S${reportData.season}`;
 	if (reportData.week) filename = `${filename}W${reportData.week}`;
 
-	await page.screenshot({ path: `./${filename.replaceAll(' ', '_')}.png`, fullPage: true });
+	await page.screenshot({ path: `./${filename.replace(/ /g, '_')}.png`, fullPage: true });
 	await browser.close();
 }
 
