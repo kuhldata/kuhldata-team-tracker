@@ -161,7 +161,7 @@ const createReportPage = async (reportData) => {
 
 	///await page.pdf(options);
 
-	let filename = `${reportData.teamName}-${reportData.year}-S${reportData.season}`;
+	let filename = `report-${reportData.teamName}-${reportData.year}-S${reportData.season}`;
 	if (reportData.week) filename = `${filename}W${reportData.week}`;
 
 	await page.screenshot({ path: `./${filename.replace(/ /g, '_')}.png`, fullPage: true });
