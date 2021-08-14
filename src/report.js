@@ -554,7 +554,7 @@ module.exports.createReport = async ({
         value: teamKPIs.races,
       },
       {
-        title: 'Driver in Team',
+        title: 'Driver count',
         value: profiles.length,
       },
       {
@@ -562,7 +562,15 @@ module.exports.createReport = async ({
         value: teamKPIs.gain,
       },
       {
-        title: 'Offical Wins',
+        title: 'gain per driver',
+        value: teamKPIs.avgGain,
+      },
+      {
+        title: 'Average iRating',
+        value: Math.round(teamKPIs.irsum / profiles.length),
+      },
+      {
+        title: 'Offical wins',
         value: teamKPIs.wins,
       },
     ],
