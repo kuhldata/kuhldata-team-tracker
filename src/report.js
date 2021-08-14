@@ -136,7 +136,7 @@ const getDriverResult = (
 ) => sessions[subSessionId].results.find((r) => r.driverId === customerId);
 
 module.exports.createReport = async ({
-  drivers, user, pass, catId, startTime, endTime, teamName,
+  drivers, user, pass, catId, startTime, endTime, teamName, week, weekC,
 }) => {
   console.log(`Start Time: ${startTime} End Time: ${endTime}`);
   // get Cookie
@@ -260,17 +260,19 @@ module.exports.createReport = async ({
 
       // timeseries
       const dayUnix = getDayUnix(profiles[i].races[j].startTime);
-      if (!profiles[i].timeseries[dayUnix]) {
-        profiles[i].timeseries[dayUnix] = {
-          races: 0,
-          rating: 0,
-          lastStartTime: 0,
-        };
-      }
-      profiles[i].timeseries[dayUnix].races += 1;
-      if (profiles[i].timeseries[dayUnix].lastStartTime < profiles[i].races[j].startTime) {
-        profiles[i].timeseries[dayUnix].lastStartTime = profiles[i].races[j].startTime;
-        profiles[i].timeseries[dayUnix].rating = result.newIRating;
+      if (result.newIRating > 0) {
+        if (!profiles[i].timeseries[dayUnix]) {
+          profiles[i].timeseries[dayUnix] = {
+            races: 0,
+            rating: 0,
+            lastStartTime: 0,
+          };
+        }
+        profiles[i].timeseries[dayUnix].races += 1;
+        if (profiles[i].timeseries[dayUnix].lastStartTime < profiles[i].races[j].startTime) {
+          profiles[i].timeseries[dayUnix].lastStartTime = profiles[i].races[j].startTime;
+          profiles[i].timeseries[dayUnix].rating = result.newIRating;
+        }
       }
 
       // start/end iR TODO: fix o -1 bug in results
@@ -279,6 +281,7 @@ module.exports.createReport = async ({
         || profiles[i].firstRaceTime > profiles[i].races[j].startTime)
         && result.oldIRating > 0
       ) {
+        console.log(`${result.oldIRating} o iR used as start`);
         profiles[i].startIr = result.oldIRating;
         profiles[i].firstRaceTime = profiles[i].races[j].startTime;
       }
@@ -287,6 +290,7 @@ module.exports.createReport = async ({
           || profiles[i].lastRaceTime < profiles[i].races[j].startTime)
           && result.newIRating > 0
       ) {
+        console.log(`${result.newIRating} n iR used as end`);
         profiles[i].endIr = result.newIRating;
         profiles[i].lastRaceTime = profiles[i].races[j].startTime;
       }
@@ -380,6 +384,7 @@ module.exports.createReport = async ({
     teamKPIs.races += profiles[i].kpis.races;
     teamKPIs.incs += profiles[i].kpis.incs;
   }
+  teamKPIs.avgGain = Math.round(teamKPIs.gain / profiles.length);
 
   // Calculate team timelines ir, races done, labels
   console.log('Team Timeseries');
@@ -528,6 +533,8 @@ module.exports.createReport = async ({
     season: iRacingTime.season,
     start: iRacingTime,
     end: timeConverter.dateToIRacingTime(new Date(endTime)),
+    week,
+    weekEnd: week + weekC - 1,
     catId,
   };
 

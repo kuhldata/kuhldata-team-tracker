@@ -6,6 +6,8 @@ const fs = require('fs');
 const yargs = require('yargs');
 const timeConverter = require('ir-time-converter');
 
+const { version } = require('../package.json');
+
 const report = require('./report');
 
 const { argv } = yargs(process.argv.slice(2));
@@ -16,6 +18,8 @@ if (argv.road) catId = 2;
 else if (argv.oval) catId = 1;
 else if (argv.dirtRoad) catId = 4;
 else if (argv.dirtOval) catId = 3;
+
+console.log(`kuhldata-team-tracker version ${version} used.`);
 
 if (!argv.teamName) {
   console.log(`Team name not set correctly. Found ${argv.teamName}. Aborting.`);
@@ -107,6 +111,8 @@ if (!argv.team) {
         startTime: weekTimes.start.getTime(),
         endTime: weekTimes.end.getTime(),
         teamName: argv.teamName,
+        week: argv.week,
+        weekC: weekCount,
       });
     } else {
       console.log(`Creating Season Report for ${year} S${argv.season} for ${drivers.length} drivers.`);

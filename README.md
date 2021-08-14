@@ -41,6 +41,8 @@ kuhldata-report --team team.txt --teamName "Demo Team" --year 2021 --season 3 --
 
 `--year 2021`, `--season 3` and `--week 8` specifies the time you want the report for. If you omit the `--year` the current year is used. If you omit the `--week` the report is build for the whole season.
 
+In case you specify a specific week, you can use `--weekCount 3` to include a specific count of weeks in your report for `--week 5 --weekCount 4` weeks 5, 6, 7 and 8 would be included.
+
 To select the category (road / oval / dirtRoad / dirtOval ) you want the report for specify the according option: `--road`, `--oval`, `--dirtRoad` or `--dirtOval`. If you omit the category, road is used.
 
 `--user`  and  `--pass` are used to hand over your credentials **directly** to iRacing. I do not send them anywhere else. It is needed to gather the data from iRacing's API. To be totally clear: That means you are using your own account for the requests. If iRacing at anytime decides that they do not want that reports like this are created they may punish your account. So: Be calm, the script is throttled to be fairly slow to not make iRacing angry. If I hear something, I will note it down here.

@@ -1,5 +1,7 @@
 const fetch = require('node-fetch');
 
+const timeConverter = require('ir-time-converter');
+
 const mapRace = (r) => {
   const obj = {
     finish: r['3'] || null,
@@ -16,6 +18,21 @@ const mapRace = (r) => {
 
   return obj;
 };
+
+// TODO: remove fallback as soon as iracing fixed the bug
+const getRacesFallback = async (cookieString, irid, catId, year, season) => fetch(`https://members.iracing.com/memberstats/member/GetResults?custid=${irid}&showraces=1&showquals=0&showtts=0&showops=0&showofficial=1&showunofficial=0&showrookie=1&showclassd=1&showclassc=1&showclassb=1&showclassa=1&showpro=1&showprowc=1&lowerbound=0&upperbound=250&sort=start_time&order=desc&format=json&category=${catId}&seasonyear=${year}&seasonquarter=${season}`, {
+  method: 'GET',
+  headers: {
+    Cookie: cookieString,
+  },
+})
+  .then(async (res) => {
+    if (res.ok && res.status === 200) return res.json();
+    console.log(`can not get races for ${irid}`);
+    const text = await res.text();
+    console.log(text);
+    throw new Error('can not get races');
+  });
 
 module.exports.getProfil = async (cookieString, irid) => fetch(`https://members.iracing.com/membersite/member/GetMember?memberId=${irid}`, {
   method: 'GET',
@@ -36,6 +53,13 @@ module.exports.getRaces = async (cookieString, irid, catId, startTime, endTime) 
 })
   .then(async (res) => {
     if (res.ok && res.status === 200) return res.json();
+    if (res.status === 504) {
+      const seasonObj = timeConverter.dateToIRacingTime(new Date(startTime));
+      console.log(`Got 504 for getting races for ${irid} between ${startTime} and ${endTime} for category ${catId}`);
+      return getRacesFallback(
+        cookieString, irid, catId, seasonObj.year, seasonObj.season,
+      );
+    }
     console.log(`can not get races for ${irid}`);
     const text = await res.text();
     console.log(text);
@@ -44,5 +68,5 @@ module.exports.getRaces = async (cookieString, irid, catId, startTime, endTime) 
   .then((races) => {
     const rs = races.d.r;
     if (!rs) return null;
-    return rs.map(mapRace);
+    return rs.map(mapRace).filter((r) => startTime <= r.startTime && r.startTime <= endTime);
   });
