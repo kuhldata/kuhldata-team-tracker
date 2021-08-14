@@ -231,11 +231,11 @@ module.exports.createReport = async ({
     profiles[i].timeseries = {};
     profiles[i].seriesStats = {};
 
-    if (profiles[i].races.length <= 0) {
-      const license = profiles[i].licenses.find((l) => l.catId === catId);
-      profiles[i].startIr = license.true_iRating;
-      profiles[i].endIr = license.true_iRating;
-    }
+    // if (profiles[i].races.length <= 0) {
+    const license = profiles[i].licenses.find((l) => l.catId === catId);
+    profiles[i].startIr = license.true_iRating;
+    profiles[i].endIr = license.true_iRating;
+    // }
     for (let j = 0; j < profiles[i].races.length; j += 1) {
       // get earliest race
       /* if (!firstRace || firstRace.week > profiles[i].races[j].week) {
