@@ -173,10 +173,12 @@
 		<div class="canvascontainer" style="height: {{teamReport.driverIrReport.height}}px;">
 			<canvas id="driverirs"></canvas>
 		</div>
-		<h3>Series raced</h3>
-		<canvas id="racedseries" width="800" height="550"></canvas>
 		<h3>Race results</h3>
 		<canvas id="raceresults" width="800" height="550"></canvas>
+		<h3>Series raced</h3>
+		<canvas id="racedseries" width="800" height="550"></canvas>
+		<h3>Races Cars</h3>
+		<canvas id="racedcars" width="800" height="550"></canvas>
 	</section>
 	<section>
 		<h2>Driver Awards</h2>
@@ -227,7 +229,7 @@
 		});
 	</script>
 	<script>
-		new Chart(document.getElementById("racedcarss"), {
+		new Chart(document.getElementById("racedcars"), {
 				type: 'pie',
 				data: {
 					labels: {{{teamReport.carsDrivenReport.labels}}},
