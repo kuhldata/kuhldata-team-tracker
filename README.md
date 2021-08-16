@@ -22,7 +22,7 @@ To see if node is correctly installed type `node -v` and `npm -v` in a powershel
 `npm i kuhldata-team-tracker -g`
 
 ## Usage
-To let the script collect data (and generate a cool report png) you can use the `kuhldata-report` command after installation.
+To let the script collect data (and generate a cool report png) you can use the `kuhldata-report` command after installation. The PNG will be save in the folder you run the command in.
 
 The full command look like this:
 ```cmd
@@ -40,6 +40,8 @@ kuhldata-report --team team.txt --teamName "Demo Team" --year 2021 --season 3 --
 `--teamName "Demo Team"` specifies the team name printed to the top of the report.
 
 `--year 2021`, `--season 3` and `--week 8` specifies the time you want the report for. If you omit the `--year` the current year is used. If you omit the `--week` the report is build for the whole season.
+
+In case you specify a specific week, you can use `--weekCount 3` to include a specific count of weeks in your report for `--week 5 --weekCount 4` weeks 5, 6, 7 and 8 would be included.
 
 To select the category (road / oval / dirtRoad / dirtOval ) you want the report for specify the according option: `--road`, `--oval`, `--dirtRoad` or `--dirtOval`. If you omit the category, road is used.
 
