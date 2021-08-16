@@ -25,7 +25,7 @@ const createTopFarmerAward = (ps) => {
   };
   for (let i = 0; i < 3 && i < ps.length; i += 1) {
     report.drivers.push({
-      name: ps[i].displayName.replaceAll('+', ' '),
+      name: ps[i].displayName.replace(/\+/g, ' '),
       value: ps[i].kpis.gain,
     });
   }
@@ -42,7 +42,7 @@ const createTopWinnerAward = (ps) => {
   for (let i = 0; i < 3 && i < ps.length; i += 1) {
     if (ps[i].kpis.wins <= 0) break;
     report.drivers.push({
-      name: ps[i].displayName.replaceAll('+', ' '),
+      name: ps[i].displayName.replace(/\+/g, ' '),
       value: ps[i].kpis.wins,
     });
   }
@@ -59,7 +59,7 @@ const createInCollectorAward = (ps) => {
   for (let i = 0; i < 3 && i < ps.length; i += 1) {
     if (ps[i].kpis.incs <= 0) break;
     report.drivers.push({
-      name: ps[i].displayName.replaceAll('+', ' '),
+      name: ps[i].displayName.replace(/\+/g, ' '),
       value: ps[i].kpis.incs,
     });
   }
@@ -76,7 +76,7 @@ const createRacerAward = (ps) => {
   for (let i = 0; i < 3 && i < ps.length; i += 1) {
     if (ps[i].kpis.races <= 0) break;
     report.drivers.push({
-      name: ps[i].displayName.replaceAll('+', ' '),
+      name: ps[i].displayName.replace(/\+/g, ' '),
       value: ps[i].kpis.races,
     });
   }
@@ -230,6 +230,7 @@ module.exports.createReport = async ({
     };
     profiles[i].timeseries = {};
     profiles[i].seriesStats = {};
+    profiles[i].carStats = {};
 
     // if (profiles[i].races.length <= 0) {
     const license = profiles[i].licenses.find((l) => l.catId === catId);
@@ -299,6 +300,11 @@ module.exports.createReport = async ({
         profiles[i].seriesStats[result.seriesName] = 0;
       }
       profiles[i].seriesStats[result.seriesName] += 1;
+
+      if (!profiles[i].carStats[result.carName]) {
+        profiles[i].carStats[result.carName] = 0;
+      }
+      profiles[i].carStats[result.carName] += 1;
 
       // races
       profiles[i].kpis.races += 1;
@@ -462,7 +468,7 @@ module.exports.createReport = async ({
       gainReport.labels.push('TEAM AVERAGE');
       gainReport.gains.push(teamKPIs.gain / profiles.length);
     }
-    gainReport.labels.push(profiles[i].displayName.replaceAll('+', ' '));
+    gainReport.labels.push(profiles[i].displayName.replace(/\+/g, ' '));
     gainReport.gains.push(profiles[i].kpis.gain);
   }
 
@@ -480,7 +486,7 @@ module.exports.createReport = async ({
       driverIrReport.labels.push('TEAM AVERAGE');
       driverIrReport.ratings.push(teamKPIs.irsum / profiles.length);
     }
-    driverIrReport.labels.push(profiles[i].displayName.replaceAll('+', ' '));
+    driverIrReport.labels.push(profiles[i].displayName.replace(/\+/g, ' '));
     driverIrReport.ratings.push(profiles[i].endIr);
   }
 
@@ -507,6 +513,16 @@ module.exports.createReport = async ({
     for (const s in profiles[i].seriesStats) {
       if (!seriesReportData[s]) seriesReportData[s] = 0;
       seriesReportData[s] += profiles[i].seriesStats[s];
+    }
+  }
+
+  console.log('Car Report');
+  // calculate series report
+  const carsReportData = {};
+  for (let i = 0; i < profiles.length; i += 1) {
+    for (const s in profiles[i].carStats) {
+      if (!carsReportData[s]) carsReportData[s] = 0;
+      carsReportData[s] += profiles[i].carStats[s];
     }
   }
 
@@ -547,6 +563,15 @@ module.exports.createReport = async ({
     racesSeriesReport.counts.push(seriesReportData[sr]);
   }
 
+  const carsDrivenReport = {
+    labels: [],
+    counts: [],
+  };
+  for (const car in carsReportData) {
+    carsDrivenReport.labels.push(car);
+    carsDrivenReport.counts.push(carsReportData[car]);
+  }
+
   outputData.teamReport = {
     kpis: [
       {
@@ -582,6 +607,7 @@ module.exports.createReport = async ({
     gainReport,
     driverIrReport,
     racesSeriesReport,
+    carsDrivenReport,
     racesOutcomeReport: {
       labels: ['Wins', '2nd-3rd', 'Finished', 'DNF'],
       counts: [

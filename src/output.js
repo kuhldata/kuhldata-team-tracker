@@ -5,93 +5,6 @@ const path = require('path');
 const puppeteer = require('puppeteer');
 const handlebars = require('handlebars');
 
-/* const data = {
-  teamName: 'Kuhldata Racing',
-  year: 2020,
-  season: 3,
-  week: 10,
-  catId: 2,
-  teamReport: {
-    kpis: [
-      {
-        title: 'Races done',
-        value: 85,
-      },
-      {
-        title: 'Driver in team',
-        value: 4,
-      },
-      {
-        title: 'iRating gain',
-        value: 568,
-      },
-    ],
-    irReport: {
-      labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday'],
-      ratings: [1111, 1203, 1050, 1850, 1253, 1203, 1452, 1406],
-      races: [0, 3, 7, 4, 3, 1, 3, 6],
-    },
-    gainReport: {
-      labels: ['Kalle Kuhlmann', 'Some One', 'a', 'b', 'c', 'Kalle Kuhlmann', 'Some One',
-        'a', 'b', 'c', 'Kalle Kuhlmann', 'Some One', 'a', 'b', 'c', 'Kalle Kuhlmann', 'Some One', 'a', 'b', 'c'],
-      gains: [3142, 4687, -300, 464, 122, 3142, 4687, -300, 464,
-        122, 3142, 4687, -300, 464, 122, 3142, 4687, -300, 464, 122],
-    },
-    driverIrReport: {
-      labels: ['Kalle Kuhlmann', 'Some One', 'a', 'b', 'MB'],
-      ratings: [5000, 4687, 3300, 464, 122],
-    },
-    racesSeriesReport: {
-      labels: ['Porsche iRacing Cup', 'VRS GT Sprint Series', 'Some unusal long special event thing'],
-      counts: [2, 12, 6],
-    },
-    racesOutcomeReport: {
-      labels: ['Wins', '2nd-3rd', 'Finished', 'DNF'],
-      counts: [4, 3, 12, 1],
-    },
-    driverAwards: [
-      {
-        title: 'Top Farmer',
-        drivers: [
-          {
-            name: 'Kalle Kuhlmann',
-            value: 200,
-          },
-          {
-            name: 'Max Mustermann',
-            value: 143,
-          },
-          {
-            name: 'Bert Baum',
-            value: 51,
-          },
-        ],
-      },
-      {
-        title: 'Most Wins',
-        drivers: [],
-      },
-      {
-        title: 'Most Races',
-        drivers: [
-          {
-            name: 'Max Mustermann',
-            value: 8,
-          },
-          {
-            name: 'Marta Müller',
-            value: 7,
-          },
-          {
-            name: 'Bert Baum',
-            value: 4,
-          },
-        ],
-      },
-    ],
-  },
-}; */
-
 const createReportPage = async (reportData) => {
   // Preprocessing data gainReport
   reportData.teamReport.gainReport.height = 110 + 25 * reportData.teamReport.gainReport.labels.length;
@@ -122,6 +35,10 @@ const createReportPage = async (reportData) => {
   reportData.teamReport.racesSeriesReport.labels = JSON.stringify(reportData.teamReport.racesSeriesReport.labels);
   reportData.teamReport.racesSeriesReport.counts = JSON.stringify(reportData.teamReport.racesSeriesReport.counts);
 
+  // raced cars PP
+  reportData.teamReport.carsDrivenReport.labels = JSON.stringify(reportData.teamReport.carsDrivenReport.labels);
+  reportData.teamReport.carsDrivenReport.counts = JSON.stringify(reportData.teamReport.carsDrivenReport.counts);
+
   // reace result / outcome
   reportData.teamReport.racesOutcomeReport.labels = JSON.stringify(reportData.teamReport.racesOutcomeReport.labels);
   reportData.teamReport.racesOutcomeReport.counts = JSON.stringify(reportData.teamReport.racesOutcomeReport.counts);
@@ -144,10 +61,10 @@ const createReportPage = async (reportData) => {
 
   /// await page.pdf(options);
 
-  let filename = `${reportData.teamName}-${reportData.year}-S${reportData.season}`;
+  let filename = `report-${reportData.teamName}-${reportData.year}-S${reportData.season}`;
   if (reportData.week) filename = `${filename}W${reportData.week}-W${reportData.weekEnd}`;
 
-  await page.screenshot({ path: `./${filename.replaceAll(' ', '_')}.png`, fullPage: true });
+  await page.screenshot({ path: `./${filename.replace(/ /g, '_')}.png`, fullPage: true });
   await browser.close();
 };
 
