@@ -568,8 +568,8 @@ module.exports.createReport = async ({
     counts: [],
   };
   for (const car in carsReportData) {
-    racesSeriesReport.labels.push(car);
-    racesSeriesReport.counts.push(carsReportData[car]);
+    carsDrivenReport.labels.push(car);
+    carsDrivenReport.counts.push(carsReportData[car]);
   }
 
   outputData.teamReport = {
