@@ -230,6 +230,7 @@ module.exports.createReport = async ({
     };
     profiles[i].timeseries = {};
     profiles[i].seriesStats = {};
+    profiles[i].carStats = {};
 
     // if (profiles[i].races.length <= 0) {
     const license = profiles[i].licenses.find((l) => l.catId === catId);
@@ -299,6 +300,11 @@ module.exports.createReport = async ({
         profiles[i].seriesStats[result.seriesName] = 0;
       }
       profiles[i].seriesStats[result.seriesName] += 1;
+
+      if (!profiles[i].carStats[result.carName]) {
+        profiles[i].carStats[result.carName] = 0;
+      }
+      profiles[i].carStats[result.carName] += 1;
 
       // races
       profiles[i].kpis.races += 1;
@@ -510,6 +516,16 @@ module.exports.createReport = async ({
     }
   }
 
+  console.log('Car Report');
+  // calculate series report
+  const carsReportData = {};
+  for (let i = 0; i < profiles.length; i += 1) {
+    for (const s in profiles[i].carStats) {
+      if (!carsReportData[s]) carsReportData[s] = 0;
+      carsReportData[s] += profiles[i].carStats[s];
+    }
+  }
+
   console.log('Driver awards');
   const driverAwards = [];
   // calculate driver awards
@@ -547,6 +563,15 @@ module.exports.createReport = async ({
     racesSeriesReport.counts.push(seriesReportData[sr]);
   }
 
+  const carsDrivenReport = {
+    labels: [],
+    counts: [],
+  };
+  for (const car in carsReportData) {
+    racesSeriesReport.labels.push(car);
+    racesSeriesReport.counts.push(carsReportData[car]);
+  }
+
   outputData.teamReport = {
     kpis: [
       {
@@ -582,6 +607,7 @@ module.exports.createReport = async ({
     gainReport,
     driverIrReport,
     racesSeriesReport,
+    carsDrivenReport,
     racesOutcomeReport: {
       labels: ['Wins', '2nd-3rd', 'Finished', 'DNF'],
       counts: [

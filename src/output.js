@@ -122,6 +122,10 @@ const createReportPage = async (reportData) => {
   reportData.teamReport.racesSeriesReport.labels = JSON.stringify(reportData.teamReport.racesSeriesReport.labels);
   reportData.teamReport.racesSeriesReport.counts = JSON.stringify(reportData.teamReport.racesSeriesReport.counts);
 
+  // raced cars PP
+  reportData.teamReport.carsDrivenReport.labels = JSON.stringify(reportData.teamReport.carsDrivenReport.labels);
+  reportData.teamReport.carsDrivenReport.counts = JSON.stringify(reportData.teamReport.carsDrivenReport.counts);
+
   // reace result / outcome
   reportData.teamReport.racesOutcomeReport.labels = JSON.stringify(reportData.teamReport.racesOutcomeReport.labels);
   reportData.teamReport.racesOutcomeReport.counts = JSON.stringify(reportData.teamReport.racesOutcomeReport.counts);

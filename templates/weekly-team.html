@@ -223,10 +223,35 @@
 					animation: {
 						duration: 0
 					},
-					title: {
-						display: true,
-						text: 'Predicted world population (millions) in 2050'
-					}
+				}
+		});
+	</script>
+	<script>
+		new Chart(document.getElementById("racedcarss"), {
+				type: 'pie',
+				data: {
+					labels: {{{teamReport.carsDrivenReport.labels}}},
+					datasets: [{
+						label: "cars driven",
+						backgroundColor: ["#F94144", "#F3722C","#F8961E","#F9C74F","#90BE6D", "#43AA8B", "#577590", '#f38590', '#eea180', '#f1b87a', '#f1b87a', '#b7d2a6', '#80cbb9', '#8fa4bc'],
+						data: {{{teamReport.carsDrivenReport.counts}}},
+					}]
+				},
+				options: {
+					responsive: false,
+					plugins: {
+						legend: {
+							labels: {
+								font: {
+									size: 18,
+								},
+							},
+							position: 'bottom',
+						},
+					},
+					animation: {
+						duration: 0
+					},
 				}
 		});
 	</script>
@@ -256,10 +281,6 @@
 					animation: {
 						duration: 0
 					},
-					title: {
-						display: true,
-						text: 'Predicted world population (millions) in 2050'
-					}
 				}
 		});
 	</script>
