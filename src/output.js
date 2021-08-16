@@ -144,13 +144,12 @@ const createReportPage = async (reportData) => {
 
   /// await page.pdf(options);
 
+  let filename = `report-${reportData.teamName}-${reportData.year}-S${reportData.season}`;
+  if (reportData.week) filename = `${filename}W${reportData.week}-W${reportData.weekEnd}`;
 
-	let filename = `report-${reportData.teamName}-${reportData.year}-S${reportData.season}`;
-	if (reportData.week) filename = `${filename}W${reportData.week}-W${reportData.weekEnd}`;
-
-	await page.screenshot({ path: `./${filename.replace(/ /g, '_')}.png`, fullPage: true });
-	await browser.close();
-}
+  await page.screenshot({ path: `./${filename.replace(/ /g, '_')}.png`, fullPage: true });
+  await browser.close();
+};
 
 module.exports.createReportPage = createReportPage;
 
